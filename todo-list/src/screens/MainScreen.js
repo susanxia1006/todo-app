@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Platform, Image } from 'react-native';
-import {  } from '../components';
+import { AddBar } from '../components';
 import { STATUS_BAR_HEIGHT } from '../utils/constants';
 
 class MainScreen extends Component {
@@ -21,6 +21,7 @@ class MainScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <AddBar displayText='Add' />
 
       </View>
     );

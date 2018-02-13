@@ -20,10 +20,10 @@ const unsubsribe = Store.subscribe(() => {
   console.log(Store.getState().todos);
 });
 
-Store.dispatch(AddTodo('sup'));
-Store.dispatch(AddTodo('suuup'));
-Store.dispatch(ToggleTodo(1));
-Store.dispatch(AddTodo('hello'));
-Store.dispatch(RemoveTodo(1));
-Store.dispatch(ToggleTodo(2));
-Store.dispatch(RemoveTodo(2));
+// Store.dispatch(AddTodo('sup'));
+// Store.dispatch(AddTodo('suuup'));
+// Store.dispatch(ToggleTodo(1));
+// Store.dispatch(AddTodo('hello'));
+// Store.dispatch(RemoveTodo(1));
+// Store.dispatch(ToggleTodo(2));
+// Store.dispatch(RemoveTodo(2));
