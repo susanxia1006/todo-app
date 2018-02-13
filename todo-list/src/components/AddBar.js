@@ -23,13 +23,19 @@ class AddBarComp extends Component {
           style={searchText}
           onChangeText={input => this.setState({ text: input })}
           value={this.state.text}
-          onSubmitEditing={() => this.props.add(this.state.text)}
+          onSubmitEditing={() => {
+            this.props.add(this.state.text);
+            this.setState({ text: '' });
+          }}
         />
 
         <Button
           buttonStyle={searchButton}
           title={this.props.displayText}
-          onPress={() => this.props.add(this.state.text)}
+          onPress={() => {
+            this.props.add(this.state.text);
+            this.setState({ text: '' });
+          }}
 
         />
       </View>
