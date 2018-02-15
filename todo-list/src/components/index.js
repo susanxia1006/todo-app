@@ -1,3 +1,4 @@
 import AddBar from './AddBar.js';
+import ToDoList from './ToDoList.js';
 
-export { AddBar };
+export { AddBar, ToDoList };
