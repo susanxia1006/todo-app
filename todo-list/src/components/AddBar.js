@@ -12,15 +12,16 @@ class AddBarComp extends Component {
 
   render() {
     const {
-      searchContainer,
+      containerStyle,
       searchText,
       searchButton
     } = styles;
 
     return (
-      <View style={searchContainer}>
+      <View style={containerStyle}>
         <TextInput
           style={searchText}
+          underlineColorAndroid='grey'
           onChangeText={input => this.setState({ text: input })}
           value={this.state.text}
           onSubmitEditing={() => {
@@ -51,7 +52,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const styles = {
-  searchContainer: {
+  containerStyle: {
     marginTop: 30,
     marginLeft: 10,
     marginRight: 10,
@@ -68,6 +69,24 @@ const styles = {
 
   }
 };
+
+// const styles = {
+//   containerStyle: {
+//     marginTop: 75,
+//     marginLeft: 10,
+//     marginRight: 10,
+//     //width: 400,
+//     flexDirection: 'row',
+//     alignSelf: 'center'
+//   },
+//   searchTextStyle: {
+//     flex: 1
+//   },
+//   buttonStyle: {
+//     height: 30,
+//     marginBottom: 8
+//   }
+// };
 
 const AddBar = connect(null, mapDispatchToProps)(AddBarComp);
 export default AddBar;

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Platform, Image } from 'react-native';
-import { AddBar } from '../components';
+import { AddBar, ToDoList } from '../components';
 import { STATUS_BAR_HEIGHT } from '../utils/constants';
 
 class MainScreen extends Component {
@@ -21,7 +21,10 @@ class MainScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <AddBar displayText='Add' />
+        <View containerStyle={{ height: 100, paddingBottm: 10 }}>
+         <AddBar displayText='Add' />
+        </View>
+        <ToDoList />
 
       </View>
     );
@@ -32,10 +35,10 @@ class MainScreen extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 30,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flex: 1,
+    //backgroundColor: '#fff',
+    //alignItems: 'center',
+    //justifyContent: 'center',
   },
   headerStyle: {
     height: Platform.OS === 'android' ? 54 + STATUS_BAR_HEIGHT : 54,
