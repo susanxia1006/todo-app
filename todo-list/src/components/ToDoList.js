@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import { View, FlatList } from 'react-native';
 import { List, SearchBar } from 'react-native-elements';
 import { connect } from 'react-redux';
+import Swipeout from 'react-native-swipeout';
 
 import ToDoListItem from './ToDoListItem.js';
-import { ToggleTodo } from '../actions';
+import { ToggleTodo, RemoveTodo } from '../actions';
 
 
 class ToDoListComp extends Component {
@@ -25,6 +26,15 @@ class ToDoListComp extends Component {
     <SearchBar placeholder="Type Here..." lightTheme round />
   );
 
+  swipeButton = id => ([{
+      text: 'Delete',
+      backgroundColor: 'red',
+      underlayColor: 'rgba(0, 0, 0, 1, 0.6)',
+      onPress: () => {
+        this.props.del(id);
+      }
+    }]);
+
 
   render() {
     return (
@@ -35,12 +45,18 @@ class ToDoListComp extends Component {
             data={this.props.todos}
             keyExtractor={item => item.id}
             renderItem={({ item }) => (
-              <ToDoListItem
-                text={item.text}
-                textDec={this.textDec(item)}
-                onLongPress={() => this.props.toggle(item.id)}
-                id={item.id}
-              />
+              <Swipeout
+                right={this.swipeButton(item.id)}
+                autoClose
+                backgroundColor='transparent'
+              >
+                <ToDoListItem
+                  text={item.text}
+                  textDec={this.textDec(item)}
+                  onLongPress={() => this.props.toggle(item.id)}
+                  id={item.id}
+                />
+              </Swipeout>
             )}
           />
         </List>
@@ -52,6 +68,9 @@ class ToDoListComp extends Component {
 const mapDispatchToProps = dispatch => ({
   toggle: id => {
     dispatch(ToggleTodo(id));
+  },
+  del: id => {
+    dispatch(RemoveTodo(id));
   }
 });
 
