@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Platform, Image } from 'react-native';
-import { AddBar, ToDoList } from '../components';
+import { StyleSheet, View, Platform, Image, ScrollView } from 'react-native';
+import { AddBar, ToDoList, StatsModal } from '../components';
 import { STATUS_BAR_HEIGHT } from '../utils/constants';
 
 class MainScreen extends Component {
@@ -21,10 +21,14 @@ class MainScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <View containerStyle={{ height: 100, paddingBottm: 10 }}>
-         <AddBar displayText='Add' />
-        </View>
-        <ToDoList />
+        <ScrollView>
+          <View containerStyle={{ height: 100, paddingBottm: 10 }}>
+           <AddBar displayText='Add' />
+          </View>
+          <ToDoList />
+        </ScrollView>
+        <StatsModal />
+        {/*maybe need to add the modal as a footer of the flatlist*/}
 
       </View>
     );
