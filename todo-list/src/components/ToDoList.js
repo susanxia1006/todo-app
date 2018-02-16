@@ -9,6 +9,17 @@ import { ToggleTodo, RemoveTodo } from '../actions';
 
 
 class ToDoListComp extends Component {
+  state = {
+    searchTerm: '',
+    displayed: []
+  }
+
+  componentWillUpdate(nextProps) {
+        if (nextProps.todos !== this.props.todos) {
+            this.setState({ displayed: nextProps.todos.filter((x) => x.text.toLowerCase().includes(this.state.searchTerm)) });
+        }
+    }
+
   textDec = item => (item.completed ? 'line-through' : 'none');
 
   renderSeparator = () => (
@@ -22,9 +33,24 @@ class ToDoListComp extends Component {
     />
   );
 
-  renderHeader = () => (
-    <SearchBar placeholder="Type Here..." lightTheme round />
-  );
+  searchText = (e) => {
+    const term = e.toLowerCase();
+    this.setState({ searchTerm: term });
+    let filtered = [];
+    filtered = this.props.todos.filter((x) => x.text.toLowerCase().includes(term));
+    this.setState({ displayed: filtered });
+  }
+
+  renderHeader = () => {
+    return (
+      <SearchBar
+        onChangeText={this.searchText.bind(this)}
+        placeholder="Type Here..."
+        lightTheme
+        round
+      />
+    );
+  }
 
   swipeButton = id => ([{
       text: 'Delete',
@@ -42,7 +68,7 @@ class ToDoListComp extends Component {
           <FlatList
             ItemSeparatorComponent={this.renderSeparator}
             ListHeaderComponent={this.renderHeader}
-            data={this.props.todos}
+            data={(!this.state.searchTerm || this.state.searchTerm === '') ? this.props.todos : this.state.displayed}
             keyExtractor={item => item.id}
             renderItem={({ item }) => (
               <Swipeout
