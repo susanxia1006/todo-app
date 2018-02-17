@@ -63,8 +63,6 @@ class ToDoListComp extends Component {
 
 
   render() {
-    //this.setState({ displayed: this.props.todos });
-
     return (
         <List containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0 }}>
           <FlatList
