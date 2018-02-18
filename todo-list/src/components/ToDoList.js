@@ -6,6 +6,7 @@ import Swipeout from 'react-native-swipeout';
 
 import ToDoListItem from './ToDoListItem.js';
 import { ToggleTodo, RemoveTodo } from '../actions';
+import { THEME_COLOR_LIGHT } from '../utils/constants';
 
 
 class ToDoListComp extends Component {
@@ -22,16 +23,6 @@ class ToDoListComp extends Component {
 
   textDec = item => (item.completed ? 'line-through' : 'none');
 
-  renderSeparator = () => (
-    <View
-      style={{
-        height: 1,
-        width: '90%',
-        backgroundColor: 'orange',
-        marginLeft: '5%'
-      }}
-    />
-  );
 
   searchText = (e) => {
     const term = e.toLowerCase();
@@ -41,25 +32,38 @@ class ToDoListComp extends Component {
     this.setState({ displayed: filtered });
   }
 
-  renderHeader = () => {
-    return (
-      <SearchBar
-        onChangeText={this.searchText.bind(this)}
-        placeholder="Type Here..."
-        lightTheme
-        round
-      />
-    );
-  }
 
   swipeButton = id => ([{
       text: 'Delete',
-      backgroundColor: 'red',
-      underlayColor: 'rgba(0, 0, 0, 1, 0.6)',
+      backgroundColor: 'rgba(255, 0, 0, 0.7)',
       onPress: () => {
         this.props.del(id);
       }
     }]);
+
+    renderSeparator = () => (
+      <View
+        style={{
+          height: 1,
+          width: '90%',
+          backgroundColor: THEME_COLOR_LIGHT,
+          marginLeft: '5%'
+        }}
+      />
+    );
+
+    renderHeader = () => (
+      <SearchBar
+        onChangeText={this.searchText.bind(this)}
+        icon={{ type: 'material', color: 'white', name: 'search' }}
+        placeholder="Search here..."
+        lightTheme
+        round
+        clearIcon
+        placeholderTextColor='white'
+        inputStyle={{ color: 'white', backgroundColor: THEME_COLOR_LIGHT }}
+      />
+    );
 
 
   render() {
