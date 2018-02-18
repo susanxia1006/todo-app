@@ -4,6 +4,7 @@ import { Button } from 'react-native-elements';
 import { connect } from 'react-redux';
 
 import { AddTodo } from '../actions';
+import { THEME_COLOR, SCREEN_WIDTH, DISPLAY_TEXT_COLOR } from '../utils/constants';
 
 class AddBarComp extends Component {
   state = {
@@ -19,16 +20,20 @@ class AddBarComp extends Component {
 
     return (
       <View style={containerStyle}>
-        <TextInput
-          style={searchText}
-          underlineColorAndroid='grey'
-          onChangeText={input => this.setState({ text: input })}
-          value={this.state.text}
-          onSubmitEditing={() => {
-            this.props.add(this.state.text);
-            this.setState({ text: '' });
-          }}
-        />
+        <View style={searchText}>
+          <TextInput
+            style={{ color: DISPLAY_TEXT_COLOR, fontSize: 16, paddingBottom: 5 }}
+            placeholder='Add an item...'
+
+            underlineColorAndroid='grey'
+            onChangeText={input => this.setState({ text: input })}
+            value={this.state.text}
+            onSubmitEditing={() => {
+              this.props.add(this.state.text);
+              this.setState({ text: '' });
+            }}
+          />
+        </View>
 
         <Button
           buttonStyle={searchButton}
@@ -37,7 +42,7 @@ class AddBarComp extends Component {
             this.props.add(this.state.text);
             this.setState({ text: '' });
           }}
-
+          containerStyle={{ backgroundColor: THEME_COLOR }}
         />
       </View>
     );
@@ -56,37 +61,21 @@ const styles = {
     marginTop: 30,
     marginLeft: 10,
     marginRight: 10,
-    marginBottom: 10
+    alignItems: 'center',
   },
   searchText: {
-    marginBottom: 10
-
+    marginBottom: 10,
+    width: SCREEN_WIDTH * 0.9,
   },
   searchButton: {
-    width: 100,
-    backgroundColor: 'blue',
-    alignSelf: 'center'
-
+    backgroundColor: THEME_COLOR,
+    width: SCREEN_WIDTH * 0.5,
+    height: 45,
+    borderColor: THEME_COLOR,
+    borderWidth: 0,
+    borderRadius: 5
   }
 };
-
-// const styles = {
-//   containerStyle: {
-//     marginTop: 75,
-//     marginLeft: 10,
-//     marginRight: 10,
-//     //width: 400,
-//     flexDirection: 'row',
-//     alignSelf: 'center'
-//   },
-//   searchTextStyle: {
-//     flex: 1
-//   },
-//   buttonStyle: {
-//     height: 30,
-//     marginBottom: 8
-//   }
-// };
 
 const AddBar = connect(null, mapDispatchToProps)(AddBarComp);
 export default AddBar;
