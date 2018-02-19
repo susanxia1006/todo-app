@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Text, View, Modal } from 'react-native';
+import { Text, View, Modal, Animated } from 'react-native';
 import { Button, Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { OpenModal, CloseModal } from '../actions';
-import { SCREEN_WIDTH, SCREEN_HEIGHT, THEME_COLOR, DISPLAY_TEXT_COLOR, MONTHS } from '../utils/constants';
+import { SCREEN_WIDTH, SCREEN_HEIGHT, THEME_COLOR, DISPLAY_TEXT_COLOR, MONTHS, THEME_COLOR_LIGHT } from '../utils/constants';
 
 class StatsModalComp extends Component {
   render() {
@@ -15,8 +15,15 @@ class StatsModalComp extends Component {
       contentRowStyle,
       itemStyle,
       buttonContainerStyle,
-      openButtonStyle
+      openButtonStyle,
+      item,
+      data,
+      label,
+      bar,
+      dataNumber
     } = styles;
+
+    const widthMutiplier = (this.props.active <= 12) ? 20 : ((SCREEN_WIDTH - 100) * (1 - (2 * marginPerc)) / this.props.active);
 
 
     const today = new Date();
@@ -30,7 +37,6 @@ class StatsModalComp extends Component {
           >
             <View style={modalStyle}>
               <View style={containerStyle}>
-                {/*<ScrollView>*/}
                   <View style={headerStyle}>
                     <Text style={{ fontSize: 22, color: 'white' }}>
                       {date}
@@ -38,25 +44,50 @@ class StatsModalComp extends Component {
                   </View>
                   <View style={contentStyle}>
                     <View style={contentRowStyle}>
-                      <Icon name='format-list-bulleted' />
+                      <Icon name='format-list-bulleted' color={DISPLAY_TEXT_COLOR} />
                       <Text style={itemStyle}>
                         You have {this.props.active} to-do items.
                       </Text>
                     </View>
                     <View style={contentRowStyle}>
-                      <Icon name='done' />
+                      <Icon name='done' color={DISPLAY_TEXT_COLOR} />
                       <Text style={itemStyle}>
-                        You completed {this.props.completed} to-do items.
+                        You completed {this.props.completed} items.
                       </Text>
                     </View>
                     <View style={contentRowStyle}>
-                      <Icon name='check-box-outline-blank' />
+                      <Icon name='check-box-outline-blank' color={DISPLAY_TEXT_COLOR} />
                       <Text style={itemStyle}>
-                        You still have {this.props.active - this.props.completed} to-do items to complete.
+                        You still have {this.props.active - this.props.completed} items to complete.
                       </Text>
                     </View>
                   </View>
-                {/*</ScrollView>*/}
+                  <View style={{ flex: 0.35, marginLeft: 10 }}>
+                    <View style={item}>
+                        <View style={data}>
+                          <Icon style={label} name='format-list-bulleted' color={DISPLAY_TEXT_COLOR} />
+                          <Animated.View style={[bar, { width: widthMutiplier * this.props.active }]} />
+
+                          <Text style={dataNumber}>{this.props.active}</Text>
+                        </View>
+                    </View>
+                    <View style={item}>
+                        <View style={data}>
+                          <Icon style={label} name='done' color={DISPLAY_TEXT_COLOR} />
+                          <Animated.View style={[bar, { width: widthMutiplier * this.props.completed }]} />
+
+                          <Text style={dataNumber}>{this.props.completed}</Text>
+                        </View>
+                    </View>
+                    <View style={item}>
+                        <View style={data}>
+                          <Icon style={label} name='check-box-outline-blank' color={DISPLAY_TEXT_COLOR} />
+                          <Animated.View style={[bar, { width: widthMutiplier * (this.props.active - this.props.completed) }]} />
+
+                          <Text style={dataNumber}>{this.props.active - this.props.completed}</Text>
+                        </View>
+                    </View>
+                  </View>
                   <View style={buttonContainerStyle}>
                     <Button
                       raised
@@ -122,7 +153,7 @@ const styles = {
     backgroundColor: THEME_COLOR
   },
   contentStyle: {
-    flex: 0.7,
+    flex: 0.5, //0.7s
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'space-around',
@@ -143,7 +174,7 @@ const styles = {
   },
   buttonContainerStyle: {
     paddingBottom: 10,
-    flex: 0.3,
+    flex: 0.15,
     justifyContent: 'flex-end'
   },
   openButtonStyle: {
@@ -151,5 +182,37 @@ const styles = {
     justifyContent: 'center',
     alignItems: 'center',
     paddingBottom: 10
+  },
+  item: {
+    flexDirection: 'column',
+    flex: 0.2,
+    marginBottom: 5,
+    marginTop: 10,
+    paddingHorizontal: 10
+  },
+  label: {
+    color: DISPLAY_TEXT_COLOR,
+    fontSize: 10,
+    height: 8,
+    alignSelf: 'center',
+    marginRight: 5
+  },
+  data: {
+    flex: 2,
+    flexDirection: 'row'
+  },
+  dataNumber: {
+    color: DISPLAY_TEXT_COLOR,
+    fontSize: 16,
+    marginLeft: 5,
+    alignSelf: 'center'
+  },
+  bar: {
+    alignSelf: 'center',
+    borderRadius: 5,
+    height: 8,
+    marginRight: 5,
+    marginLeft: 5,
+    backgroundColor: THEME_COLOR_LIGHT
   }
 };
