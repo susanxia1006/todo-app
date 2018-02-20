@@ -3,7 +3,14 @@ import { Text, View, Modal, Animated } from 'react-native';
 import { Button, Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { OpenModal, CloseModal } from '../actions';
-import { SCREEN_WIDTH, SCREEN_HEIGHT, THEME_COLOR, DISPLAY_TEXT_COLOR, MONTHS, THEME_COLOR_LIGHT } from '../utils/constants';
+import {
+  SCREEN_WIDTH,
+  SCREEN_HEIGHT,
+  THEME_COLOR,
+  DISPLAY_TEXT_COLOR,
+  MONTHS,
+  THEME_COLOR_LIGHT
+} from '../utils/constants';
 
 class StatsModalComp extends Component {
   render() {
