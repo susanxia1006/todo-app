@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Platform, Image, ScrollView } from 'react-native';
+import { Button } from 'react-native-elements';
 import { AddBar, ToDoList, StatsModal } from '../components';
 import { STATUS_BAR_HEIGHT, THEME_COLOR } from '../utils/constants';
 
@@ -15,12 +16,20 @@ class MainScreen extends Component {
         style={styles.imageStyle}
       />
 
-    )
+    ),
 
   });
+
   render() {
+    const { navigate } = this.props.navigation;
     return (
       <View style={styles.container}>
+      <Button
+        title='Login In'
+        onPress={() =>
+          navigate('Login')
+        }
+      />
         <ScrollView>
           <View containerStyle={{ height: 100, paddingBottm: 1 }}>
            <AddBar displayText='Add' />
