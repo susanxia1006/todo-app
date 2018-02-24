@@ -18,6 +18,7 @@ const config = {
 };
 
 const firebaseApp = firebase.initializeApp(config);
+console.log('fb initialized');
 
 const db = firebaseApp.database();
 

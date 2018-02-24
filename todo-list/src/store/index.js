@@ -3,7 +3,7 @@ import {
 } from 'redux';
 
 
-import Reducer from '../reducers';
+import { Reducer } from '../reducers';
 //import { AddTodo, RemoveTodo, ToggleTodo } from '../actions';
 
 const Store = createStore(
@@ -13,13 +13,14 @@ const Store = createStore(
 export default Store;
 
 // debug code
-console.log(Store.getState().todos);
+//console.log(Store.getState().todos);
 
 //log SelectionReducer each time the state changes
-const unsubsribe = Store.subscribe(() => {
+const unsubscribe = Store.subscribe(() => {
   console.log(Store.getState().todos);
 });
 
+unsubscribe();
 // Store.dispatch(AddTodo('sup'));
 // Store.dispatch(AddTodo('suuup'));
 // Store.dispatch(ToggleTodo(1));
