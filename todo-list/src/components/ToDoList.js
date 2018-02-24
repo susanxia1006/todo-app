@@ -7,19 +7,48 @@ import Swipeout from 'react-native-swipeout';
 import ToDoListItem from './ToDoListItem.js';
 import { ToggleTodo, RemoveTodo } from '../actions';
 import { THEME_COLOR_LIGHT } from '../utils/constants';
-
+import db from '../firebase.js';
+import { toDoItemStateChanger } from '../reducers';
 
 class ToDoListComp extends Component {
   state = {
     searchTerm: '',
-    displayed: []
+    displayed: [],
+    todos: []
   }
 
-  componentWillUpdate(nextProps) {
-        if (nextProps.todos !== this.props.todos) {
-            this.setState({ displayed: nextProps.todos.filter((x) => x.text.toLowerCase().includes(this.state.searchTerm)) });
+  toggle = id => {
+    toDoItemStateChanger(ToggleTodo(id));
+  }
+
+  del= id => {
+    toDoItemStateChanger(RemoveTodo(id));
+  }
+
+  componentWillUpdate(nextProps, nextState) {
+        if (nextState.todos !== this.state.todos) {
+            this.setState({ displayed: nextState.todos.filter((x) => x.text.toLowerCase().includes(this.state.searchTerm)) });
         }
     }
+
+  //use did mount to make sure all children are mounted and have run their own componentDidMount()
+  componentDidMount() {
+    db.ref('/items').on('value', (datasnapshot) => {
+      const items = [];
+      datasnapshot.forEach((child) => {
+        items.push({
+          id: child.key,
+          completed: child.val().completed,
+          text: child.val().text
+        });
+      });
+      this.setState({ todos: items });
+      db.ref('/completed').set(items.filter((x) => x.completed).length);
+      db.ref('/total').set(items.length);
+      //DO NOT use this.state.todos but use items instead, because of the issue here:
+      //https://stackoverflow.com/questions/37401635/react-js-wait-for-setstate-to-finish-before-triggering-a-function
+    });
+  }
 
   textDec = item => (item.completed ? 'line-through' : 'none');
 
@@ -28,7 +57,7 @@ class ToDoListComp extends Component {
     const term = e.toLowerCase();
     this.setState({ searchTerm: term });
     let filtered = [];
-    filtered = this.props.todos.filter((x) => x.text.toLowerCase().includes(term));
+    filtered = this.state.todos.filter((x) => x.text.toLowerCase().includes(term));
     this.setState({ displayed: filtered });
   }
 
@@ -37,7 +66,7 @@ class ToDoListComp extends Component {
       text: 'Delete',
       backgroundColor: 'rgba(255, 0, 0, 0.7)',
       onPress: () => {
-        this.props.del(id);
+        this.del(id);
       }
     }]);
 
@@ -72,7 +101,7 @@ class ToDoListComp extends Component {
           <FlatList
             ItemSeparatorComponent={this.renderSeparator}
             ListHeaderComponent={this.renderHeader}
-            data={(!this.state.searchTerm || this.state.searchTerm === '') ? this.props.todos : this.state.displayed}
+            data={(!this.state.searchTerm || this.state.searchTerm === '') ? this.state.todos : this.state.displayed}
             keyExtractor={item => item.id}
             renderItem={({ item }) => (
               <Swipeout
@@ -83,7 +112,7 @@ class ToDoListComp extends Component {
                 <ToDoListItem
                   text={item.text}
                   textDec={this.textDec(item)}
-                  onLongPress={() => this.props.toggle(item.id)}
+                  onLongPress={() => this.toggle(item.id)}
                   id={item.id}
                 />
               </Swipeout>
@@ -95,18 +124,6 @@ class ToDoListComp extends Component {
 
 }
 
-const mapDispatchToProps = dispatch => ({
-  toggle: id => {
-    dispatch(ToggleTodo(id));
-  },
-  del: id => {
-    dispatch(RemoveTodo(id));
-  }
-});
 
-
-const mapStateToProps = state => ({ todos: state.todos });
-
-
-const ToDoList = connect(mapStateToProps, mapDispatchToProps)(ToDoListComp);
+const ToDoList = connect(null, null)(ToDoListComp);
 export default ToDoList;

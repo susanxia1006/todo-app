@@ -4,12 +4,17 @@ import { Button } from 'react-native-elements';
 import { connect } from 'react-redux';
 
 import { AddTodo } from '../actions';
+import { toDoItemStateChanger } from '../reducers';
 import { THEME_COLOR, SCREEN_WIDTH, DISPLAY_TEXT_COLOR } from '../utils/constants';
 
 class AddBarComp extends Component {
   state = {
     text: ''
   };
+
+  add = text => {
+    toDoItemStateChanger(AddTodo(text));
+  }
 
   render() {
     const {
@@ -29,7 +34,7 @@ class AddBarComp extends Component {
             onChangeText={input => this.setState({ text: input })}
             value={this.state.text}
             onSubmitEditing={() => {
-              this.props.add(this.state.text);
+              this.add(this.state.text);
               this.setState({ text: '' });
             }}
           />
@@ -39,7 +44,7 @@ class AddBarComp extends Component {
           buttonStyle={searchButton}
           title={this.props.displayText}
           onPress={() => {
-            this.props.add(this.state.text);
+            this.add(this.state.text);
             this.setState({ text: '' });
           }}
           containerStyle={{ backgroundColor: THEME_COLOR }}
@@ -48,13 +53,6 @@ class AddBarComp extends Component {
     );
   }
 }
-
-const mapDispatchToProps = dispatch => ({
-  add: text => {
-    dispatch(AddTodo(text));
-  }
-
-});
 
 const styles = {
   containerStyle: {
@@ -77,5 +75,5 @@ const styles = {
   }
 };
 
-const AddBar = connect(null, mapDispatchToProps)(AddBarComp);
+const AddBar = connect(null, null)(AddBarComp);
 export default AddBar;

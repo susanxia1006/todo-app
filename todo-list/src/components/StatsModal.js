@@ -3,6 +3,7 @@ import { Text, View, Modal, Animated } from 'react-native';
 import { Button, Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { OpenModal, CloseModal } from '../actions';
+import db from '../firebase.js';
 import {
   SCREEN_WIDTH,
   SCREEN_HEIGHT,
@@ -13,6 +14,19 @@ import {
 } from '../utils/constants';
 
 class StatsModalComp extends Component {
+  state = {
+    total: 0,
+    completed: 0
+  }
+  componentDidMount() {
+    // access to firebase are async calls.
+    db.ref('/total').on('value', datasnapshot => {
+      this.setState({ total: datasnapshot.val() });
+    });
+    db.ref('/completed').on('value', datasnapshot => {
+      this.setState({ completed: datasnapshot.val() });
+    });
+  }
   render() {
     const {
       modalStyle,
@@ -53,19 +67,19 @@ class StatsModalComp extends Component {
                     <View style={contentRowStyle}>
                       <Icon name='format-list-bulleted' color={DISPLAY_TEXT_COLOR} />
                       <Text style={itemStyle}>
-                        You have {this.props.active} to-do items.
+                        You have {this.state.total} to-do items.
                       </Text>
                     </View>
                     <View style={contentRowStyle}>
                       <Icon name='done' color={DISPLAY_TEXT_COLOR} />
                       <Text style={itemStyle}>
-                        You completed {this.props.completed} items.
+                        You completed {this.state.completed} items.
                       </Text>
                     </View>
                     <View style={contentRowStyle}>
                       <Icon name='check-box-outline-blank' color={DISPLAY_TEXT_COLOR} />
                       <Text style={itemStyle}>
-                        You still have {this.props.active - this.props.completed} items to complete.
+                        You still have {this.state.total - this.state.completed} items to complete.
                       </Text>
                     </View>
                   </View>
@@ -73,25 +87,25 @@ class StatsModalComp extends Component {
                     <View style={item}>
                         <View style={data}>
                           <Icon style={label} name='format-list-bulleted' color={DISPLAY_TEXT_COLOR} />
-                          <Animated.View style={[bar, { width: widthMutiplier * this.props.active }]} />
+                          <Animated.View style={[bar, { width: widthMutiplier * this.state.total }]} />
 
-                          <Text style={dataNumber}>{this.props.active}</Text>
+                          <Text style={dataNumber}>{this.state.total}</Text>
                         </View>
                     </View>
                     <View style={item}>
                         <View style={data}>
                           <Icon style={label} name='done' color={DISPLAY_TEXT_COLOR} />
-                          <Animated.View style={[bar, { width: widthMutiplier * this.props.completed }]} />
+                          <Animated.View style={[bar, { width: widthMutiplier * this.state.completed }]} />
 
-                          <Text style={dataNumber}>{this.props.completed}</Text>
+                          <Text style={dataNumber}>{this.state.completed}</Text>
                         </View>
                     </View>
                     <View style={item}>
                         <View style={data}>
                           <Icon style={label} name='check-box-outline-blank' color={DISPLAY_TEXT_COLOR} />
-                          <Animated.View style={[bar, { width: widthMutiplier * (this.props.active - this.props.completed) }]} />
+                          <Animated.View style={[bar, { width: widthMutiplier * (this.state.total - this.state.completed) }]} />
 
-                          <Text style={dataNumber}>{this.props.active - this.props.completed}</Text>
+                          <Text style={dataNumber}>{this.state.total - this.state.completed}</Text>
                         </View>
                     </View>
                   </View>
@@ -121,8 +135,6 @@ class StatsModalComp extends Component {
 
 const mapStateToProps = state => ({
   modalOpen: state.modal.modalOpen,
-  active: state.todos.length,
-  completed: state.todos.filter((x) => x.completed).length
 });
 
 const mapDispatchToProps = dispatch => ({
