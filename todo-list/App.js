@@ -3,6 +3,7 @@ import { Provider } from 'react-redux';
 import { StackNavigator } from 'react-navigation';
 import firebase from 'firebase';
 import MainScreen from './src/screens/MainScreen.js';
+import LoginIn from './src/screens/LoginIn.js';
 import Store from './src/store';
 
 // get rid of the yellobox warning https://github.com/facebook/react-native/issues/12981
@@ -19,6 +20,7 @@ export default class App extends Component {
   render() {
     const MainNavigator = StackNavigator({
       Main: { screen: MainScreen },
+      Login: { screen: LoginIn }
 
     });
 
