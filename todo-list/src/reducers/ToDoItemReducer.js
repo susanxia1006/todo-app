@@ -11,6 +11,7 @@ function toDoItemStateChanger(action) {
       break; // if there is no return , must break to avoid funky behaviors.
     }
     case REMOVE_TODO: {
+      console.log('removing init');
       db.ref('/items').child(action.id).remove();
       break;
     }
